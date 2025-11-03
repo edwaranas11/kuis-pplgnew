@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kuis PPLG - Manajemen IT</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f7f9;
+      color: #333;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #1e3a8a;
+      color: white;
+    }
+    header img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #1e3a8a;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      padding: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      transition: background 0.2s;
+    }
+    .options label:hover {
+      background-color: #e0e7ff;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1e3a8a;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3749a2;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #d1fae5;
+      border-left: 5px solid #10b981;
+      border-radius: 5px;
+      display: none;
+    }
+    .correct {
+      background-color: #d1fae5;
+      border-color: #10b981;
+    }
+    .incorrect {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+    }
+    .feedback {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    @media screen and (max-width: 600px) {
+      .container {
+        margin: 10px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://edwaranas11.github.io/soal-pplg1/LOGO%20SMK.png" alt="Logo Sekolah" />
+    <h1>Kuis PPLG - Manajemen IT</h1>
+    <p>Oleh Edwar Anas, S.Kom</p>
+  </header>
+
+  <div class="container" id="quiz-container">
+    <form id="quizForm"></form>
+    <div class="result" id="resultBox"></div>
+    <button type="button" onclick="submitQuiz()">Selesai</button>
+    <button type="button" onclick="location.reload()" style="display: none;" id="retryBtn">Coba Lagi</button>
+  </div>
+
+  <script>
+    const questions = [
+      // 💻 Manajemen Teknologi Informasi
+      { question: "1. Apa yang dimaksud dengan manajemen teknologi informasi?", options: ["Proses mengelola sumber daya IT agar mendukung tujuan organisasi", "Pembuatan perangkat lunak", "Desain antarmuka pengguna", "Pemrograman sistem operasi"], answer: 0 },
+      { question: "2. Tujuan utama manajemen IT adalah…", options: ["Menjamin efektivitas dan efisiensi penggunaan teknologi dalam organisasi", "Menghapus sistem lama", "Menambah jumlah server tanpa alasan", "Mengganti staf IT"], answer: 0 },
+      { question: "3. IT Governance berfungsi untuk…", options: ["Menjamin IT selaras dengan strategi bisnis organisasi", "Menentukan desain UI aplikasi", "Mengatur jadwal kerja pegawai", "Menulis kode program"], answer: 0 },
+      { question: "4. CIO (Chief Information Officer) bertanggung jawab terhadap…", options: ["Strategi dan arah penggunaan teknologi informasi di organisasi", "Keuangan perusahaan", "Promosi produk di media sosial", "Kegiatan administrasi harian"], answer: 0 },
+      { question: "5. Framework populer yang digunakan dalam tata kelola IT adalah…", options: ["COBIT", "HTML", "Bootstrap", "TensorFlow"], answer: 0 },
+      { question: "6. Dalam IT project management, fase awal yang dilakukan adalah…", options: ["Inisiasi proyek", "Pengujian sistem", "Pemeliharaan sistem", "Implementasi"], answer: 0 },
+      { question: "7. Manajemen risiko IT berfungsi untuk…", options: ["Mengidentifikasi dan mengurangi potensi ancaman terhadap sistem", "Meningkatkan risiko proyek", "Menghapus backup data", "Menunda pengembangan"], answer: 0 },
+      { question: "8. KPI dalam manajemen IT adalah singkatan dari…", options: ["Key Performance Indicator", "Knowledge Processing Interface", "Kernel Programming Instruction", "Key Program Implementation"], answer: 0 },
+      { question: "9. Apa fungsi utama helpdesk dalam organisasi IT?", options: ["Memberikan dukungan teknis kepada pengguna", "Mengembangkan hardware baru", "Menjual produk IT", "Membuat laporan keuangan"], answer: 0 },
+      { question: "10. IT Service Management (ITSM) fokus pada…", options: ["Pengelolaan layanan IT agar mendukung kebutuhan bisnis", "Desain hardware baru", "Penjualan perangkat lunak", "Penghapusan data lama"], answer: 0 },
+      { question: "11. Framework ITSM yang paling banyak digunakan adalah…", options: ["ITIL (Information Technology Infrastructure Library)", "Kubernetes", "Docker", "Git"], answer: 0 },
+      { question: "12. Tujuan utama dari Change Management dalam manajemen layanan TI adalah…", options: ["Menghapus perubahan yang tidak disetujui", "Memastikan semua perubahan dilakukan secara terkendali dan meminimalkan gangguan layanan", "Mengizinkan setiap tim melakukan perubahan tanpa batas", "Mengganti seluruh sistem secara berkala"], answer: 1 },
+      { question: "13. Aset dalam manajemen IT mencakup…", options: ["Perangkat keras, perangkat lunak, data, dan sumber daya manusia", "Hanya komputer server", "Hanya aplikasi", "Hanya dokumen digital"], answer: 0 },
+      { question: "14. Tujuan utama manajemen proyek IT adalah…", options: ["Menyelesaikan proyek tepat waktu, sesuai anggaran, dan memenuhi kebutuhan pengguna", "Menambah fitur sebanyak mungkin", "Mengurangi tim proyek", "Meningkatkan biaya operasional"], answer: 0 },
+      { question: "15. Salah satu alat bantu populer dalam manajemen proyek IT adalah…", options: ["Jira", "Word", "Paint", "PowerPoint"], answer: 0 },
+      { question: "16. Cloud computing dalam manajemen IT berperan untuk…", options: ["Menyediakan sumber daya IT secara fleksibel melalui internet", "Menghapus data lokal", "Mengunci jaringan", "Mengganti semua perangkat keras"], answer: 0 },
+      { question: "17. Apa manfaat utama automasi dalam manajemen IT?", options: ["Meningkatkan efisiensi dan mengurangi kesalahan manusia", "Menambah beban kerja", "Menghambat proses", "Mengurangi akurasi sistem"], answer: 0 },
+      { question: "18. Disaster Recovery Plan (DRP) bertujuan untuk…", options: ["Memulihkan sistem dan data setelah terjadi bencana atau gangguan besar", "Menghapus semua data lama", "Mengganti staf IT", "Menambah beban jaringan"], answer: 0 },
+      { question: "19. Konsep IT Asset Management (ITAM) berfokus pada…", options: ["Pelacakan dan optimalisasi seluruh aset IT dalam organisasi", "Pengembangan aplikasi baru", "Peningkatan desain grafis", "Promosi digital marketing"], answer: 0 },
+      { question: "20. Tantangan utama dalam manajemen IT modern adalah…", options: ["Keamanan siber dan perubahan teknologi yang cepat", "Kurangnya komputer di kantor", "Minimnya sumber daya manusia", "Tidak adanya jaringan internet"], answer: 0 }
+    ];
+
+    const quizForm = document.getElementById("quizForm");
+    questions.forEach((q, index) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<h2>${q.question}</h2><div class="options">` +
+        q.options.map((opt, i) => `
+          <label>
+            <input type="radio" name="q${index}" value="${i}"/> ${opt}
+          </label>`).join("") +
+        `</div><div class="feedback" id="feedback${index}"></div>`;
+      quizForm.appendChild(div);
+    });
+
+    function submitQuiz() {
+      const answers = questions.map((_, i) =>
+        document.querySelector(`input[name="q${i}"]:checked`)
+      );
+
+      if (answers.includes(null)) {
+        alert("Silakan jawab semua soal terlebih dahulu!");
+        return;
+      }
+
+      let score = 0;
+      answers.forEach((ans, i) => {
+        const correct = questions[i].answer;
+        const feedbackEl = document.getElementById(`feedback${i}`);
+        const labels = document.querySelectorAll(`input[name="q${i}"]`);
+
+        labels.forEach(input => {
+          const label = input.closest("label");
+          label.classList.remove("correct", "incorrect");
+          if (parseInt(input.value) === correct) {
+            label.classList.add("correct");
+          }
+        });
+
+        if (parseInt(ans.value) === correct) {
+          score++;
+          feedbackEl.textContent = "✔ Benar";
+          feedbackEl.style.color = "green";
+        } else {
+          feedbackEl.textContent = `✖ Salah. Jawaban yang benar: ${questions[i].options[correct]}`;
+          feedbackEl.style.color = "red";
+          ans.closest("label").classList.add("incorrect");
+        }
+      });
+
+      const resultBox = document.getElementById("resultBox");
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `<strong>Skor Kamu: ${score} / ${questions.length}</strong><br>Terus semangat belajar ya!`;
+
+      document.querySelector("button[onclick='submitQuiz()']").style.display = "none";
+      document.getElementById("retryBtn").style.display = "inline-block";
+    }
+  </script>
+</body>
+</html>
